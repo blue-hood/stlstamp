@@ -1,3 +1,0 @@
-#!/bin/sh
-blender --background --python stamp.py
-

@@ -5,12 +5,14 @@ import numpy as np
 import pickle
 import bpy
 from mathutils import Vector
+import sys
 
+filename = sys.argv[4];
 bar = 2.2
 depth = 0.2
 
 bpy.ops.object.delete()
-img = cv2.imread('test.png', -1)
+img = cv2.imread(filename, -1)
 for y in range(img.shape[0]):
 	for x in range(img.shape[1]):
 		if (x%2==0)&(y%2==0):
@@ -33,4 +35,4 @@ ctx['selected_objects'] = obs
 ctx['selected_editable_bases'] = [scene.object_bases[ob.name] for ob in obs]
 bpy.ops.object.join(ctx)
 
-bpy.ops.export_mesh.stl(filepath = 'stamp.stl')
+bpy.ops.export_mesh.stl(filepath = filename)
