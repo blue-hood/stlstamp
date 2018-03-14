@@ -6,8 +6,8 @@ import pickle
 import bpy
 from mathutils import Vector
 
-bar = 2.0
-depth = 0.4
+bar = 2.2
+depth = 0.2
 
 bpy.ops.object.delete()
 img = cv2.imread('test.png', -1)
