@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # coding: utf-8
-import cv2
 import numpy as np
 import pickle
 import bpy
@@ -12,7 +11,9 @@ bar = 2.2
 depth = 0.2
 
 bpy.ops.object.delete()
-img = cv2.imread(filename, -1)
+with open(filename, 'rb') as f:
+	img = pickle.load(f, encoding='latin-1');
+print(img);
 for y in range(img.shape[0]):
 	for x in range(img.shape[1]):
 		if (x%2==0)&(y%2==0):
