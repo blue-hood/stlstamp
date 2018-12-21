@@ -12,14 +12,19 @@
 		`sync`;
 		exec('mogrify -trim /tmp/'.$filename);
 		`sync`;
-		exec('python imgread.py /tmp/'.$filename);
-		`sync`;
-		exec('blender --background --python genstamp.py /tmp/'.$filename.' '.$set['stamp_height']);
-		`sync`;
-		header('Content-Type: application/force-download');
-		header('Content-Length: '.filesize('/tmp/'.$filename));
-		header('Content-Disposition: attachment; filename="'.pathinfo($filename)['filename'].'.stl"');
-		readfile('/tmp/'.$filename);
+                $imgsize = getimagesize(/tmp/'.$filename);
+                if ($imgsize[0]*$imgsize[1] < 64*64){
+			exec('python imgread.py /tmp/'.$filename);
+			`sync`;
+			exec('blender --background --python genstamp.py /tmp/'.$filename.' '.$set['stamp_height']);
+			`sync`;
+			header('Content-Type: application/force-download');
+			header('Content-Length: '.filesize('/tmp/'.$filename));
+			header('Content-Disposition: attachment; filename="'.pathinfo($filename)['filename'].'.stl"');
+			readfile('/tmp/'.$filename);
+		}else{
+			echo '�'このスタンプの3Dデー� 'このスタンプの3Dデータは出力できません。'
+		}
 		unlink('/tmp/'.$filename);
 	}catch(Exception $e){
 		catch_default($e);
