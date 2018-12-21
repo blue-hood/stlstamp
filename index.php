@@ -12,7 +12,7 @@
 		`sync`;
 		exec('mogrify -trim /tmp/'.$filename);
 		`sync`;
-                $imgsize = getimagesize(/tmp/'.$filename);
+                $imgsize = getimagesize('/tmp/'.$filename);
                 if ($imgsize[0]*$imgsize[1] < 64*64){
 			exec('python imgread.py /tmp/'.$filename);
 			`sync`;
