@@ -6,23 +6,34 @@ import bpy
 from mathutils import Vector
 import sys
 
-filename = sys.argv[4];
-bar = 2.2
-depth = 0.2
+filename = sys.argv[4]
+bar = int(sys.argv[5])
+depth = 3
 
 bpy.ops.object.delete()
+bpy.context.scene.unit_settings.system = 'METRIC';
+bpy.context.scene.unit_settings.scale_length = 0.5;
 with open(filename, 'rb') as f:
 	img = pickle.load(f, encoding='latin-1');
 print(img);
 for y in range(img.shape[0]):
 	for x in range(img.shape[1]):
 		if (x%2==0)&(y%2==0):
-			if (img[y][x][3] == 0)|(img[y][x][0] == 255): # trans, white
-				obj = bpy.ops.mesh.primitive_cube_add(location=(x*0.1, y*0.1, bar))
-				bpy.ops.transform.resize(value=(0.1, 0.1, bar))
-			else: # black
-				obj = bpy.ops.mesh.primitive_cube_add(location=(x*0.1, y*0.1, depth + bar))
-				bpy.ops.transform.resize(value=(0.1, 0.1, depth + bar))
+		#if 1:
+			if img.shape[2] == 4: # use a channel
+				if (img[y][x][3] == 0)|(img[y][x][0] == 255): # trans, white
+					obj = bpy.ops.mesh.primitive_cube_add(location=(x, y, bar))
+					bpy.ops.transform.resize(value=(1.0, 1.0, bar))
+				else: # black
+					obj = bpy.ops.mesh.primitive_cube_add(location=(x, y, depth + bar))
+					bpy.ops.transform.resize(value=(1.0, 1.0, depth + bar))
+			else:
+				if img[y][x][0] == 255: # white
+					obj = bpy.ops.mesh.primitive_cube_add(location=(x, y, bar))
+					bpy.ops.transform.resize(value=(1.0, 1.0, bar))
+				else: # black
+					obj = bpy.ops.mesh.primitive_cube_add(location=(x, y, depth + bar))
+					bpy.ops.transform.resize(value=(1.0, 1.0, depth + bar))
 
 scene = bpy.context.scene
 obs = []
@@ -36,4 +47,4 @@ ctx['selected_objects'] = obs
 ctx['selected_editable_bases'] = [scene.object_bases[ob.name] for ob in obs]
 bpy.ops.object.join(ctx)
 
-bpy.ops.export_mesh.stl(filepath = filename)
+bpy.ops.export_mesh.stl(filepath = filename, ascii = False, use_scene_unit = True)
