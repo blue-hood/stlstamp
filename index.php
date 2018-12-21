@@ -23,7 +23,7 @@
 			header('Content-Disposition: attachment; filename="'.pathinfo($filename)['filename'].'.stl"');
 			readfile('/tmp/'.$filename);
 		}else{
-			echo '�'このスタンプの3Dデー� 'このスタンプの3Dデータは出力できません。'
+			echo 'このスタンプは3Dデータを出力できません。';
 		}
 		unlink('/tmp/'.$filename);
 	}catch(Exception $e){
